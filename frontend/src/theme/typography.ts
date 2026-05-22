@@ -1,0 +1,41 @@
+export const typography = {
+  family: {
+    heading: 'Angelone',
+    body: 'Angelone',
+    italic: 'Angelone',
+  },
+  size: {
+    eyebrow: 11,
+    caption: 12,
+    small: 13,
+    body: 15,
+    bodyLarge: 17,
+    titleSmall: 20,
+    title: 28,
+    display: 48,
+    hero: 64,
+  },
+  lineHeight: {
+    eyebrow: 14,
+    caption: 16,
+    small: 18,
+    body: 22,
+    bodyLarge: 25,
+    titleSmall: 28,
+    title: 36,
+    display: 56,
+    hero: 70,
+  },
+  weight: {
+    regular: '400',
+    medium: '500',
+    semibold: '600',
+    bold: '700',
+  },
+  letterSpacing: {
+    tight: -1.2,
+    normal: 0,
+    wide: 0.3,
+    caps: 1.5,
+  },
+} as const;

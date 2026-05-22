@@ -1,5 +1,7 @@
+import { Button, Card, AppText } from '@/components/ui';
+import { colors, layout, spacing } from '@/lib/theme';
 import React from 'react';
-import { View, Text, Platform } from 'react-native';
+import { Platform, View } from 'react-native';
 
 interface Props {
   children: React.ReactNode;
@@ -99,21 +101,41 @@ export class ErrorBoundary extends React.Component<Props, State> {
 
   render() {
     if (this.state.hasError) {
-      return (
-        <View id="orchids-error-boundary" className="flex-1 bg-white">
-          <View className="flex-1 items-center justify-center p-5">
-            <Text className="mb-2 text-center text-4xl font-bold">Something went wrong</Text>
-            <Text className="mb-3 text-center text-sm text-gray-600">
-              {this.state.error?.message}
-            </Text>
-            {Platform.OS !== 'web' && (
-              <Text className="mt-2 text-center text-sm text-gray-600">
-                Please check your device logs for more details.
-              </Text>
-            )}
+        return (
+          <View id="orchids-error-boundary" style={{ flex: 1, backgroundColor: colors.background }}>
+            <View
+              style={{
+                alignSelf: 'center',
+                flex: 1,
+                justifyContent: 'center',
+                maxWidth: layout.maxContentWidth,
+                padding: layout.screenPadding,
+                width: '100%',
+              }}>
+              <Card padding="lg" elevated>
+                <View style={{ gap: spacing.lg }}>
+                  <View style={{ gap: spacing.sm }}>
+                    <AppText variant="label" tone="accent">
+                      LUNE
+                    </AppText>
+                    <AppText variant="title">Something went wrong</AppText>
+                    <AppText variant="body" tone="secondary">
+                      {this.state.error?.message}
+                    </AppText>
+                    {Platform.OS !== 'web' ? (
+                      <AppText variant="bodySmall" tone="muted">
+                        Please check your device logs for more details.
+                      </AppText>
+                    ) : null}
+                  </View>
+                  <Button fullWidth onPress={() => this.setState({ hasError: false, error: null })}>
+                    Try again
+                  </Button>
+                </View>
+              </Card>
+            </View>
           </View>
-        </View>
-      );
+        );
     }
 
     return this.props.children;
