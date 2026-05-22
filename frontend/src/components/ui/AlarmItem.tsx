@@ -2,7 +2,7 @@ import type { Alarm } from '@/src/types/app';
 import { formatRepeatDays, sortRepeatDays } from '@/src/utils/formatDate';
 import { colors, radii, shadows, spacing } from '@/src/theme';
 import { Edit3, Trash2 } from 'lucide-react-native';
-import { Pressable, View } from 'react-native';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { formatAlarmClock, getMsUntilAlarm, formatCountdown } from '@/src/state/alarmStore';
 import { AppText } from './AppText';
 import { Card } from './Card';
@@ -23,42 +23,39 @@ export function AlarmItem({ alarm, onToggle, onEdit, onDelete }: AlarmItemProps)
   return (
     <Card
       elevated={alarm.enabled}
-      style={{
-        gap: spacing[4],
-        opacity: alarm.enabled ? 1 : 0.54,
-        borderColor: alarm.enabled ? 'rgba(154, 119, 255, 0.32)' : colors.border,
-        backgroundColor: alarm.enabled ? 'rgba(255,255,255,0.9)' : colors.surfaceSoft,
-        ...(alarm.enabled ? shadows.glow : {}),
-      }}>
-      <View style={{ alignItems: 'flex-start', flexDirection: 'row', gap: spacing[3] }}>
-        <View style={{ flex: 1, gap: spacing[1] }}>
-          <AppText variant="display">{formatAlarmClock(alarm).replace(` ${alarm.period}`, '')}</AppText>
-          <AppText variant="label" tone="accent">{alarm.period} • in {countdown}</AppText>
+      style={[
+        styles.card,
+        alarm.enabled ? styles.cardEnabled : styles.cardDisabled,
+      ]}>
+      <View style={styles.headerRow}>
+        <View style={{ flex: 1, gap: spacing[1], minWidth: 0 }}>
+          <AppText variant="display" style={styles.timeText} numberOfLines={1}>{formatAlarmClock(alarm).replace(` ${alarm.period}`, '')}</AppText>
+          <AppText variant="label" tone="accent" numberOfLines={1}>{alarm.period} • in {countdown}</AppText>
         </View>
         <Toggle value={alarm.enabled} onValueChange={(next) => onToggle?.(alarm.id, next)} />
       </View>
 
-        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing[2] }}>
-          <Badge label={formatRepeatDays(sortedRepeatDays)} active={sortedRepeatDays.length > 0} />
-          <Badge label={alarm.wakeMode} />
-          <Badge label={`${alarm.challengeType} challenge`} active={alarm.challengeType !== 'None'} />
-          <Badge label={alarm.sound} />
-        </View>
+      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing[2] }}>
+        <Badge label={formatRepeatDays(sortedRepeatDays)} active={sortedRepeatDays.length > 0} />
+        <Badge label={alarm.wakeMode} />
+        <Badge label={`${alarm.challengeType} challenge`} active={alarm.challengeType !== 'None'} />
+        <Badge label={alarm.sound} />
+      </View>
 
-        <View style={{ alignItems: 'center', flexDirection: 'row', gap: spacing[3] }}>
-          <View style={{ flex: 1 }}>
-            <AppText variant="bodySmall" tone="secondary">{alarm.label}</AppText>
-            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing[1], marginTop: spacing[2] }}>
-              {dayOrder.map((day) => {
-                const active = sortedRepeatDays.includes(day);
-                return (
-                  <View key={day} style={{ alignItems: 'center', backgroundColor: active ? colors.primary : colors.surfaceMuted, borderColor: active ? colors.primaryDeep : colors.border, borderRadius: radii.full, borderWidth: 1, justifyContent: 'center', minWidth: 38, paddingHorizontal: spacing[2], paddingVertical: 5 }}>
-                    <AppText variant="caption" tone={active ? 'inverse' : 'muted'}>{day}</AppText>
-                  </View>
-                );
-              })}
-            </View>
+      <View style={{ alignItems: 'center', flexDirection: 'row', gap: spacing[3] }}>
+        <View style={{ flex: 1 }}>
+          <AppText variant="bodySmall" tone="secondary">{alarm.label}</AppText>
+          <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing[1], marginTop: spacing[2] }}>
+            {dayOrder.map((day) => {
+              const active = sortedRepeatDays.includes(day);
+              return (
+                <View key={day} style={{ alignItems: 'center', backgroundColor: active ? colors.primary : colors.surfaceMuted, borderColor: active ? colors.primaryDeep : colors.border, borderRadius: radii.full, borderWidth: 1, justifyContent: 'center', minWidth: 38, paddingHorizontal: spacing[2], paddingVertical: 5 }}>
+                  <AppText variant="caption" tone={active ? 'inverse' : 'muted'}>{day}</AppText>
+                </View>
+              );
+            })}
           </View>
+        </View>
         <Pressable onPress={() => onEdit?.(alarm.id)} style={iconButton}><Edit3 color={colors.primaryDeep} size={18} /></Pressable>
         <Pressable onPress={() => onDelete?.(alarm.id)} style={[iconButton, { backgroundColor: colors.surfacePeach }]}><Trash2 color={colors.coral} size={18} /></Pressable>
       </View>
@@ -73,6 +70,31 @@ function Badge({ label, active = false }: { label: string; active?: boolean }) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  card: {
+    gap: spacing[4],
+  },
+  cardEnabled: {
+    backgroundColor: 'rgba(255,255,255,0.9)',
+    borderColor: 'rgba(154, 119, 255, 0.32)',
+    ...shadows.glow,
+  },
+  cardDisabled: {
+    backgroundColor: colors.surfaceSoft,
+    borderColor: colors.border,
+    opacity: 0.6,
+  },
+  headerRow: {
+    alignItems: 'flex-start',
+    flexDirection: 'row',
+    gap: spacing[3],
+  },
+  timeText: {
+    fontSize: 42,
+    lineHeight: 48,
+  },
+});
 
 const iconButton = {
   alignItems: 'center' as const,

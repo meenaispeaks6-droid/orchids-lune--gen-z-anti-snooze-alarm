@@ -173,7 +173,6 @@ export default function ProfileScreen() {
       footer={
         <BottomNav
           activeTab="Profile"
-          onAddPress={() => router.push('/alarm/new')}
           onTabPress={(tab) => router.push(tab === 'Home' ? '/home' : tab === 'Alarms' ? '/alarms' : tab === 'Stats' ? '/stats' : '/profile')}
         />
       }>

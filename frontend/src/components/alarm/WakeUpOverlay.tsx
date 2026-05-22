@@ -34,7 +34,7 @@ export function WakeUpOverlay() {
   const mathChoices = useMemo(() => {
     if (!triggeredAlarm) return [];
     return [...buildRandomWrongAnswers(triggeredAlarm.mathQuestion.answer), triggeredAlarm.mathQuestion.answer].sort(() => Math.random() - 0.5);
-  }, [triggeredAlarm?.triggeredAt]);
+  }, [triggeredAlarm]);
 
   if (!triggeredAlarm) return null;
 

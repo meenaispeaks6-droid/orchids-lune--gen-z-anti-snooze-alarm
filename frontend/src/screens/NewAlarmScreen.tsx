@@ -6,7 +6,7 @@ import { colors, radii, spacing, shadows } from '@/src/theme';
 import type { Alarm, AlarmChallengeType, AlarmSound, WakeMode } from '@/src/types/app';
 import { router, useLocalSearchParams } from 'expo-router';
 import { ArrowLeft, BellRing, Check, Music2, Sparkles } from 'lucide-react-native';
-import { useEffect, useMemo, useRef, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { Pressable, ScrollView, StyleSheet, View, type NativeScrollEvent, type NativeSyntheticEvent } from 'react-native';
 
 const itemHeight = 42;
@@ -24,19 +24,13 @@ type WheelPickerProps<T extends string | number> = {
 };
 
 function WheelPicker<T extends string | number>({ label, values, value, format = String, onChange }: WheelPickerProps<T>) {
-  const scrollRef = useRef<ScrollView>(null);
   const selectedIndex = Math.max(0, values.findIndex((item) => item === value));
   const scrollOffset = selectedIndex * itemHeight;
-
-  useEffect(() => {
-    requestAnimationFrame(() => scrollRef.current?.scrollTo({ y: scrollOffset, animated: false }));
-  }, [scrollOffset]);
 
   const selectIndex = (index: number) => {
     const nextIndex = Math.min(values.length - 1, Math.max(0, index));
     const nextValue = values[nextIndex];
     onChange(nextValue);
-    scrollRef.current?.scrollTo({ y: nextIndex * itemHeight, animated: true });
   };
 
   const handleScrollEnd = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
@@ -51,7 +45,6 @@ function WheelPicker<T extends string | number>({ label, values, value, format =
         <View pointerEvents="none" style={styles.wheelFadeTop} />
         <View pointerEvents="none" style={styles.wheelFadeBottom} />
         <ScrollView
-          ref={scrollRef}
           bounces={false}
           decelerationRate="fast"
           nestedScrollEnabled
@@ -62,6 +55,7 @@ function WheelPicker<T extends string | number>({ label, values, value, format =
           showsVerticalScrollIndicator={false}
           snapToAlignment="start"
           snapToInterval={itemHeight}
+          contentOffset={{ y: scrollOffset, x: 0 }}
           contentContainerStyle={{ paddingVertical: wheelPadding }}>
           {values.map((item, index) => {
             const distance = Math.abs(index - selectedIndex);
@@ -93,15 +87,17 @@ function OptionGrid<T extends string>({ items, selected, onSelect }: { items: re
 
 function RepeatSelector({ selected, onToggle }: { selected: string[]; onToggle: (day: string) => void }) {
   return (
-    <View style={{ flexDirection: 'row', gap: spacing[2], justifyContent: 'space-between' }}>
+    <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing[2] }}>
       {repeatDays.map((day) => {
         const active = selected.includes(day);
         return (
           <Pressable
             key={day}
+            accessibilityRole="button"
+            accessibilityState={{ selected: active }}
             onPress={() => onToggle(day)}
             style={({ pressed }) => [styles.dayButton, active ? styles.dayButtonActive : null, pressed ? { transform: [{ scale: 0.95 }] } : null]}>
-            <AppText variant="caption" tone={active ? 'inverse' : 'secondary'}>{day.slice(0, 1)}</AppText>
+            <AppText variant="caption" tone={active ? 'inverse' : 'secondary'}>{day.slice(0, 3)}</AppText>
           </Pressable>
         );
       })}
@@ -135,7 +131,7 @@ export default function NewAlarmScreen() {
 
   useEffect(() => {
     setDraft(draftFromAlarm(existing));
-  }, [existing?.id]);
+  }, [existing]);
 
   const timePreview = useMemo(() => `${String(draft.hour).padStart(2, '0')}:${String(draft.minute).padStart(2, '0')} ${draft.period}`, [draft.hour, draft.minute, draft.period]);
   const setField = <K extends keyof AlarmDraft>(key: K, value: AlarmDraft[K]) => setDraft((current) => ({ ...current, [key]: value }));
@@ -162,7 +158,7 @@ export default function NewAlarmScreen() {
 
   return (
     <View style={{ backgroundColor: colors.background, flex: 1 }}>
-      <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
+      <ScrollView contentContainerStyle={styles.container} keyboardShouldPersistTaps="handled" showsVerticalScrollIndicator={false}>
         <View style={styles.headerRow}>
           <Pressable onPress={() => router.back()} style={styles.roundIcon}><ArrowLeft color={colors.text} size={20} /></Pressable>
           <View style={{ flex: 1 }}>
@@ -248,7 +244,7 @@ export default function NewAlarmScreen() {
 const styles = StyleSheet.create({
   container: {
     alignSelf: 'center',
-    gap: spacing[6],
+    gap: spacing[5],
     maxWidth: 460,
     padding: spacing[5],
     paddingBottom: spacing[12],
@@ -382,23 +378,24 @@ const styles = StyleSheet.create({
       opacity: 1,
       transform: [{ scale: 1.08 }],
     },
-    wheelNumberNear: {
-      opacity: 0.48,
-      transform: [{ scale: 0.92 }],
-    },
-    wheelNumberFar: {
-      opacity: 0.22,
-      transform: [{ scale: 0.84 }],
-    },
+  wheelNumberNear: {
+    opacity: 0.48,
+    transform: [{ scale: 0.92 }],
+  },
+  wheelNumberFar: {
+    opacity: 0.22,
+    transform: [{ scale: 0.84 }],
+  },
   dayButton: {
     alignItems: 'center',
     backgroundColor: colors.surfaceSoft,
     borderColor: colors.border,
     borderRadius: radii.full,
     borderWidth: 1,
+    flex: 1,
     height: 42,
     justifyContent: 'center',
-    width: 42,
+    minWidth: 52,
   },
   dayButtonActive: {
     backgroundColor: colors.primary,

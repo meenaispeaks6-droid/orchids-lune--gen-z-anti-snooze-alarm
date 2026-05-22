@@ -9,7 +9,7 @@ export type StitchConfig = {
 };
 
 export function getStitchConfig(): StitchConfig {
-  const requiredKeys: Array<[string, string | undefined]> = [
+  const requiredKeys: [string, string | undefined][] = [
     ['EXPO_PUBLIC_STITCH_API_KEY', STITCH_API_KEY],
     ['EXPO_PUBLIC_STITCH_PROJECT_ID', STITCH_PROJECT_ID],
   ];

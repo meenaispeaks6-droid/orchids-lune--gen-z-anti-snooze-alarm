@@ -4,7 +4,6 @@ import {
   ActivityIndicator,
   Pressable,
   type PressableProps,
-  type PressableStateCallbackType,
   type TextStyle,
   type ViewStyle,
 } from 'react-native';

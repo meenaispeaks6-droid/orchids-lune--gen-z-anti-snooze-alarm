@@ -170,40 +170,40 @@ export default function HomeScreen() {
   };
 
   return (
-    <ScreenShell footer={<BottomNav activeTab="Home" onAddPress={() => router.push('/alarm/new')} onTabPress={navigate} />} bottomInset={spacing[10]}>
+    <ScreenShell footer={<BottomNav activeTab="Home" onTabPress={navigate} />}>
       <PageHeader eyebrow="LUNE" title="Good morning, Amina" subtitle="Your premium wake-up dashboard is glowing today." showNotification />
 
       <Card elevated tonal="lavender" style={{ overflow: 'hidden', padding: spacing[5] }}>
-        <DecorativeOrbit />
-        <View style={{ flexDirection: 'row', gap: spacing[4] }}>
-          <View style={{ flex: 1, gap: spacing[4] }}>
-            <View style={{ gap: spacing[1] }}>
-              <AppText variant="label" tone="accent">Next Alarm</AppText>
-              <AppText variant="display">{nextAlarm ? formatAlarmClock(nextAlarm) : '--:--'}</AppText>
-              <AppText variant="bodySmall" tone="secondary">{nextAlarm ? `${nextAlarm.wakeMode} • ${nextAlarm.challengeType} • ${remaining}` : 'Create your first premium wake-up flow.'}</AppText>
-            </View>
-            {nextAlarm ? (
-              <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing[2] }}>
-                {nextAlarm.repeatDays.length ? nextAlarm.repeatDays.map((day) => (
-                  <View key={day} style={{ backgroundColor: colors.surface, borderColor: colors.border, borderRadius: radii.full, borderWidth: 1, paddingHorizontal: spacing[3], paddingVertical: spacing[1] }}>
-                    <AppText variant="caption" tone="accent">{day}</AppText>
-                  </View>
-                )) : <StatPill label="Repeat" value="Once" />}
+          <DecorativeOrbit />
+          <View style={{ flexDirection: 'row', gap: spacing[3] }}>
+            <View style={{ flex: 1, gap: spacing[4], minWidth: 0 }}>
+              <View style={{ gap: spacing[1] }}>
+                <AppText variant="label" tone="accent">Next Alarm</AppText>
+                <AppText variant="display">{nextAlarm ? formatAlarmClock(nextAlarm) : '--:--'}</AppText>
+                <AppText variant="bodySmall" tone="secondary">{nextAlarm ? `${nextAlarm.wakeMode} • ${nextAlarm.challengeType} • ${remaining}` : 'Create your first premium wake-up flow.'}</AppText>
               </View>
-            ) : null}
-            <View style={{ alignItems: 'center', flexDirection: 'row', gap: spacing[2], justifyContent: 'space-between' }}>
-              <View style={{ alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.55)', borderRadius: radii.full, flexDirection: 'row', gap: spacing[2], paddingHorizontal: spacing[3], paddingVertical: spacing[2] }}>
-                <View style={{ backgroundColor: nextAlarm?.enabled ? colors.primary : colors.surfaceMuted, borderRadius: radii.full, height: 14, width: 26 }} />
-                <AppText variant="caption" tone="accent">Countdown {remaining}</AppText>
+              {nextAlarm ? (
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing[2] }}>
+                  {nextAlarm.repeatDays.length ? nextAlarm.repeatDays.map((day) => (
+                    <View key={day} style={{ backgroundColor: colors.surface, borderColor: colors.border, borderRadius: radii.full, borderWidth: 1, paddingHorizontal: spacing[3], paddingVertical: spacing[1] }}>
+                      <AppText variant="caption" tone="accent">{day}</AppText>
+                    </View>
+                  )) : <StatPill label="Repeat" value="Once" />}
+                </View>
+              ) : null}
+              <View style={{ alignItems: 'center', flexDirection: 'row', gap: spacing[2], justifyContent: 'space-between' }}>
+                <View style={{ alignItems: 'center', backgroundColor: 'rgba(255,255,255,0.55)', borderRadius: radii.full, flex: 1, flexDirection: 'row', gap: spacing[2], minWidth: 0, paddingHorizontal: spacing[3], paddingVertical: spacing[2] }}>
+                  <View style={{ backgroundColor: nextAlarm?.enabled ? colors.primary : colors.surfaceMuted, borderRadius: radii.full, height: 14, width: 26 }} />
+                  <AppText variant="caption" tone="accent" numberOfLines={1}>Countdown {remaining}</AppText>
+                </View>
+                <Pressable onPress={() => nextAlarm ? router.push({ pathname: '/alarm/[id]', params: { id: nextAlarm.id } }) : router.push('/alarm/new')} style={{ alignItems: 'center', backgroundColor: colors.surface, borderRadius: radii.full, paddingHorizontal: spacing[3], paddingVertical: spacing[2] }}>
+                  <AppText variant="caption" tone="accent">{nextAlarm ? 'Edit alarm' : 'Create'}</AppText>
+                </Pressable>
               </View>
-              <Pressable onPress={() => nextAlarm ? router.push({ pathname: '/alarm/[id]', params: { id: nextAlarm.id } }) : router.push('/alarm/new')} style={{ alignItems: 'center', backgroundColor: colors.surface, borderRadius: radii.full, paddingHorizontal: spacing[3], paddingVertical: spacing[2] }}>
-                <AppText variant="caption" tone="accent">{nextAlarm ? 'Edit alarm' : 'Create'}</AppText>
-              </Pressable>
             </View>
+            <AlarmIllustration />
           </View>
-          <AlarmIllustration />
-        </View>
-      </Card>
+        </Card>
 
 
         <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing[3] }}>
@@ -244,14 +244,20 @@ export default function HomeScreen() {
         </Card>
       </View>
 
-      <View style={{ gap: spacing[3] }}>
-        <SectionHeader eyebrow="Schedule" title="Your upcoming alarms" actionLabel="View all" onActionPress={() => router.push('/alarms')} />
-        {sortedAlarms.slice(0, 3).map((alarm) => (
-          <AlarmItem key={alarm.id} alarm={alarm} onToggle={toggleAlarm} onDelete={deleteAlarm} onEdit={(id) => router.push({ pathname: '/alarm/[id]', params: { id } })} />
-        ))}
-      </View>
+        <View style={{ gap: spacing[3] }}>
+          <SectionHeader eyebrow="Schedule" title="Your upcoming alarms" actionLabel="View all" onActionPress={() => router.push('/alarms')} />
+          {sortedAlarms.slice(0, 3).map((alarm) => (
+            <AlarmItem key={alarm.id} alarm={alarm} onToggle={toggleAlarm} onDelete={deleteAlarm} onEdit={(id) => router.push({ pathname: '/alarm/[id]', params: { id } })} />
+          ))}
+          {!sortedAlarms.length ? (
+            <Card tonal="muted" style={{ alignItems: 'center', gap: spacing[2], padding: spacing[5] }}>
+              <AppText variant="titleSmall">No alarms yet</AppText>
+              <AppText variant="bodySmall" tone="secondary" align="center">Set your first alarm to start building a morning streak.</AppText>
+            </Card>
+          ) : null}
+        </View>
 
-      <Card elevated style={{ gap: spacing[4] }}>
+        <Card elevated style={{ gap: spacing[4] }}>
         <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
           <View style={{ gap: 4, flex: 1 }}>
             <AppText variant="label" tone="accent">Motivation Quote</AppText>

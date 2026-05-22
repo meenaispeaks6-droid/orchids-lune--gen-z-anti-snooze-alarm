@@ -42,13 +42,12 @@ export default function AlarmsScreen() {
       footer={
         <BottomNav
           activeTab="Alarms"
-          onAddPress={() => router.push('/alarm/new')}
           onTabPress={(tab) => router.push(tab === 'Home' ? '/home' : tab === 'Alarms' ? '/alarms' : tab === 'Stats' ? '/stats' : '/profile')}
         />
       }>
       <PageHeader title="Your alarms" subtitle="Create, edit, disable, delete, and preview every wake-up mission." />
 
-        <Card tonal="accent" style={styles.heroCard}>
+      <Card tonal="accent" style={styles.heroCard}>
           <View style={styles.heroTopRow}>
             <View style={styles.heroIconWrap}>
               <ShieldCheck color={colors.primaryDeep} size={24} />
@@ -154,6 +153,7 @@ const styles = StyleSheet.create({
   },
   heroStatsRow: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: spacing[2],
   },
   miniStat: {
@@ -165,6 +165,7 @@ const styles = StyleSheet.create({
     flex: 1,
     flexDirection: 'row',
     gap: spacing[2],
+    minWidth: 150,
     padding: spacing[3],
   },
   miniStatIcon: {

@@ -1,4 +1,4 @@
-import { colors, radii, shadows, spacing } from '@/src/theme';
+import { radii, shadows, spacing } from '@/src/theme';
 import { BarChart3, Bell, Home, UserRound } from 'lucide-react-native';
 import { useEffect, useMemo, useRef } from 'react';
 import { Animated, Easing, Pressable, View } from 'react-native';
@@ -10,7 +10,6 @@ export type TabKey = 'Home' | 'Alarms' | 'Stats' | 'Profile';
 type BottomNavProps = {
   activeTab: TabKey;
   onTabPress: (tab: TabKey) => void;
-  onAddPress?: () => void;
 };
 
 const tabs = [

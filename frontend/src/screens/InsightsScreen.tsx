@@ -15,7 +15,6 @@ export default function InsightsScreen() {
       footer={
         <BottomNav
           activeTab="Stats"
-          onAddPress={() => router.push('/alarm/new')}
           onTabPress={navigateTab}
         />
       }>
@@ -31,8 +30,10 @@ export default function InsightsScreen() {
         <SectionHeader eyebrow="Weekly" title="Consistency trend" />
         <View style={{ alignItems: 'flex-end', flexDirection: 'row', gap: spacing[2], height: 120 }}>
           {consistencyPoints.map((point, index) => (
-            <View key={`${point.label}-${index}`} style={{ alignItems: 'center', flex: 1, gap: spacing[2] }}>
-              <View style={{ backgroundColor: colors.secondary, borderRadius: radii.full, height: point.value, width: '100%' }} />
+            <View key={`${point.label}-${index}`} style={{ alignItems: 'center', flex: 1, gap: spacing[2], justifyContent: 'flex-end' }}>
+              <View style={{ backgroundColor: colors.surfaceMuted, borderRadius: radii.full, height: 104, justifyContent: 'flex-end', overflow: 'hidden', width: '100%' }}>
+                <View style={{ backgroundColor: colors.secondary, borderRadius: radii.full, height: `${Math.min(100, Math.max(8, point.value))}%`, width: '100%' }} />
+              </View>
               <AppText variant="caption" tone="muted">{point.label}</AppText>
             </View>
           ))}

@@ -1,7 +1,7 @@
 import { AppText, Button, Card } from '@/src/components/ui';
 import { colors, radii, shadows, spacing } from '@/src/theme';
 import { router } from 'expo-router';
-import { Check, ChevronLeft, Delete, Sparkles, Timer, X, Zap } from 'lucide-react-native';
+import { Check, ChevronLeft, Sparkles, Timer, X, Zap } from 'lucide-react-native';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, Pressable, Vibration, View } from 'react-native';
 import Svg, { Circle } from 'react-native-svg';

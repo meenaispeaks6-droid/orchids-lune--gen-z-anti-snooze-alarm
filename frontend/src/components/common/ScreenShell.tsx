@@ -20,16 +20,18 @@ const contentStyle = {
   width: '100%' as const,
 };
 
-export function ScreenShell({ children, footer, scroll = true, bottomInset = spacing[8] }: ScreenShellProps) {
+export function ScreenShell({ children, footer, scroll = true, bottomInset = spacing[20] }: ScreenShellProps) {
+  const contentBottomPadding = footer ? bottomInset : spacing[8];
+
   return (
     <WaveBackground>
       <SafeAreaView style={{ flex: 1 }}>
         {scroll ? (
-          <ScrollView contentContainerStyle={[contentStyle, { paddingBottom: footer ? spacing[6] : bottomInset }]} showsVerticalScrollIndicator={false}>
+          <ScrollView contentContainerStyle={[contentStyle, { paddingBottom: contentBottomPadding }]} showsVerticalScrollIndicator={false}>
             {children ?? <Slot />}
           </ScrollView>
         ) : (
-          <View style={[contentStyle, { flex: 1, paddingBottom: footer ? spacing[4] : bottomInset }]}>{children ?? <Slot />}</View>
+          <View style={[contentStyle, { flex: 1, paddingBottom: contentBottomPadding }]}>{children ?? <Slot />}</View>
         )}
         {footer ? <View style={{ alignSelf: 'center', maxWidth: layout.maxWidth, width: '100%' }}>{footer}</View> : null}
       </SafeAreaView>
