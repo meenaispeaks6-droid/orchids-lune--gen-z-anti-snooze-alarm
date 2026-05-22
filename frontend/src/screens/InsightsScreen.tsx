@@ -5,7 +5,7 @@ import { colors, radii, spacing } from '@/src/theme';
 import { router } from 'expo-router';
 import { View } from 'react-native';
 
-const navigateTab = (tab: 'Home' | 'Alarms' | 'Stats' | 'Profile') => {
+const navigateTab = (tab: 'Home' | 'Alarms' | 'Stats' | 'Settings') => {
   router.push(tab === 'Home' ? '/home' : tab === 'Alarms' ? '/alarms' : tab === 'Stats' ? '/stats' : '/profile');
 };
 

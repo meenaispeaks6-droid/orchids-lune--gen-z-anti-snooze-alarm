@@ -1,11 +1,11 @@
 import { radii, shadows, spacing } from '@/src/theme';
-import { BarChart3, Bell, Home, UserRound } from 'lucide-react-native';
+import { BarChart3, Bell, Home, Settings2 } from 'lucide-react-native';
 import { useEffect, useMemo, useRef } from 'react';
 import { Animated, Easing, Pressable, View } from 'react-native';
 import Svg, { Circle, Defs, LinearGradient, Path, Stop } from 'react-native-svg';
 import { AppText } from './AppText';
 
-export type TabKey = 'Home' | 'Alarms' | 'Stats' | 'Profile';
+export type TabKey = 'Home' | 'Alarms' | 'Stats' | 'Settings';
 
 type BottomNavProps = {
   activeTab: TabKey;
@@ -16,14 +16,14 @@ const tabs = [
   { key: 'Home' as const, label: 'Home', icon: Home },
   { key: 'Alarms' as const, label: 'Alarm', icon: Bell },
   { key: 'Stats' as const, label: 'Stats', icon: BarChart3 },
-  { key: 'Profile' as const, label: 'Profile', icon: UserRound },
+  { key: 'Settings' as const, label: 'Setting', icon: Settings2 },
 ];
 
 const activeIndexByTab: Record<TabKey, number> = {
   Home: 0,
   Alarms: 1,
   Stats: 2,
-  Profile: 3,
+  Settings: 3,
 };
 
 function GlassSparkles() {

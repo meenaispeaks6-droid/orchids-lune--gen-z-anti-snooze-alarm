@@ -162,7 +162,7 @@ export default function HomeScreen() {
   }, []);
 
   const remaining = useMemo(() => (nextAlarm ? formatCountdown(getMsUntilAlarm(nextAlarm, new Date(now))) : 'No active alarm'), [nextAlarm, now]);
-  const navigate = (tab: 'Home' | 'Alarms' | 'Stats' | 'Profile') => {
+  const navigate = (tab: 'Home' | 'Alarms' | 'Stats' | 'Settings') => {
     if (tab === 'Home') return router.push('/home');
     if (tab === 'Alarms') return router.push('/alarms');
     if (tab === 'Stats') return router.push('/stats');
