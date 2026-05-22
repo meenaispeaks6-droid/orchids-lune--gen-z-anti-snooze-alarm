@@ -38,27 +38,27 @@ export function AlarmItem({ alarm, onToggle, onEdit, onDelete }: AlarmItemProps)
         <Toggle value={alarm.enabled} onValueChange={(next) => onToggle?.(alarm.id, next)} />
       </View>
 
-      <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing[2] }}>
-        <Badge label={formatRepeatDays(sortedRepeatDays)} />
-        <Badge label={alarm.wakeMode} />
-        <Badge label={`${alarm.challengeType} challenge`} active={alarm.challengeType !== 'None'} />
-        <Badge label={alarm.sound} />
-      </View>
-
-      <View style={{ alignItems: 'center', flexDirection: 'row', gap: spacing[3] }}>
-        <View style={{ flex: 1 }}>
-          <AppText variant="bodySmall" tone="secondary">{alarm.label}</AppText>
-          <View style={{ flexDirection: 'row', gap: spacing[1], marginTop: spacing[2] }}>
-            {dayOrder.map((day) => {
-              const active = sortedRepeatDays.includes(day);
-              return (
-                <View key={day} style={{ alignItems: 'center', backgroundColor: active ? colors.primary : colors.surfaceMuted, borderRadius: radii.full, height: 22, justifyContent: 'center', width: 22 }}>
-                  <AppText variant="caption" tone={active ? 'inverse' : 'muted'}>{day.slice(0, 1)}</AppText>
-                </View>
-              );
-            })}
-          </View>
+        <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing[2] }}>
+          <Badge label={formatRepeatDays(sortedRepeatDays)} active={sortedRepeatDays.length > 0} />
+          <Badge label={alarm.wakeMode} />
+          <Badge label={`${alarm.challengeType} challenge`} active={alarm.challengeType !== 'None'} />
+          <Badge label={alarm.sound} />
         </View>
+
+        <View style={{ alignItems: 'center', flexDirection: 'row', gap: spacing[3] }}>
+          <View style={{ flex: 1 }}>
+            <AppText variant="bodySmall" tone="secondary">{alarm.label}</AppText>
+            <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: spacing[1], marginTop: spacing[2] }}>
+              {dayOrder.map((day) => {
+                const active = sortedRepeatDays.includes(day);
+                return (
+                  <View key={day} style={{ alignItems: 'center', backgroundColor: active ? colors.primary : colors.surfaceMuted, borderColor: active ? colors.primaryDeep : colors.border, borderRadius: radii.full, borderWidth: 1, justifyContent: 'center', minWidth: 38, paddingHorizontal: spacing[2], paddingVertical: 5 }}>
+                    <AppText variant="caption" tone={active ? 'inverse' : 'muted'}>{day}</AppText>
+                  </View>
+                );
+              })}
+            </View>
+          </View>
         <Pressable onPress={() => onEdit?.(alarm.id)} style={iconButton}><Edit3 color={colors.primaryDeep} size={18} /></Pressable>
         <Pressable onPress={() => onDelete?.(alarm.id)} style={[iconButton, { backgroundColor: colors.surfacePeach }]}><Trash2 color={colors.coral} size={18} /></Pressable>
       </View>

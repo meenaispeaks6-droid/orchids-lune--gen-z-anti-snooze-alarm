@@ -3,7 +3,7 @@ import { AlarmItem, AppText, BottomNav, Button, Card, SectionHeader } from '@/sr
 import { formatAlarmClock, formatCountdown, getMsUntilAlarm, useAlarmStore } from '@/src/state/alarmStore';
 import { colors, radii, spacing, shadows } from '@/src/theme';
 import { router } from 'expo-router';
-import { BellPlus, Medal, Quote, Sparkles, Zap } from 'lucide-react-native';
+import { BellPlus, Quote, Sparkles, Zap } from 'lucide-react-native';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Animated, Easing, Image, Pressable, View } from 'react-native';
 import Svg, { Circle, Ellipse, Line, Path } from 'react-native-svg';
@@ -108,6 +108,27 @@ function AlarmIllustration() {
   );
 }
 
+function TrophyBadge() {
+  return (
+    <View style={{ alignItems: 'center', height: 136, justifyContent: 'center', width: 136 }}>
+      <View style={{ alignItems: 'center', backgroundColor: '#35c27b', borderRadius: 28, height: 126, justifyContent: 'center', transform: [{ rotate: '-7deg' }], width: 126 }}>
+        <View style={{ backgroundColor: '#2cb56f', borderRadius: 30, bottom: 9, height: 122, position: 'absolute', right: 8, width: 122 }} />
+        <Svg height={120} viewBox="0 0 120 120" width={120}>
+          <Path d="M35 28 H85 V42 C85 62 76 79 60 85 C44 79 35 62 35 42 Z" fill="#f6c238" />
+          <Path d="M45 28 H75 V35 H45 Z" fill="#ffe06a" />
+          <Path d="M60 84 L60 100" stroke="#f6c238" strokeLinecap="round" strokeWidth="12" />
+          <Path d="M45 100 H75" stroke="#d79b13" strokeLinecap="round" strokeWidth="10" />
+          <Path d="M35 38 C22 38 16 47 16 58 C16 68 23 74 31 74 H37" fill="none" stroke="#ffe06a" strokeLinecap="round" strokeWidth="8" />
+          <Path d="M85 38 C98 38 104 47 104 58 C104 68 97 74 89 74 H83" fill="none" stroke="#ffe06a" strokeLinecap="round" strokeWidth="8" />
+          <Path d="M31 32 C32 26 38 22 44 22" fill="none" stroke="#d79b13" strokeLinecap="round" strokeWidth="4" />
+          <Path d="M89 32 C88 26 82 22 76 22" fill="none" stroke="#d79b13" strokeLinecap="round" strokeWidth="4" />
+          <Path d="M61 40 V76" stroke="#ffd95b" strokeLinecap="round" strokeWidth="3" />
+        </Svg>
+      </View>
+    </View>
+  );
+}
+
 function StreakImageBadge() {
   return (
     <View style={{ height: 92, overflow: 'hidden', width: 118 }}>
@@ -201,29 +222,22 @@ export default function HomeScreen() {
             </View>
           </Card>
 
-        <Card elevated tonal="sage" style={{ flex: 1, minWidth: 160 }}>
-          <View style={{ alignItems: 'center', flexDirection: 'row', justifyContent: 'space-between' }}>
-            <View style={{ gap: spacing[2] }}>
-              <View style={{ backgroundColor: colors.surface, borderRadius: radii.full, height: 42, justifyContent: 'center', width: 42 }}>
-                <Medal color={colors.primaryDeep} size={22} style={{ alignSelf: 'center' }} />
-              </View>
-              <AppText variant="label" tone="accent">Leaderboard</AppText>
-            </View>
-            <Pressable style={{ backgroundColor: colors.surface, borderRadius: radii.full, paddingHorizontal: spacing[3], paddingVertical: spacing[2] }}>
-              <AppText variant="caption" tone="accent">View All</AppText>
-            </Pressable>
+        <Card elevated tonal="sage" style={{ flex: 1, minWidth: 160, overflow: 'hidden' }}>
+          <View style={{ alignItems: 'center', gap: spacing[2] }}>
+            <TrophyBadge />
+            <AppText variant="label" tone="accent">Leaderboard</AppText>
+            <AppText variant="bodySmall" tone="secondary" style={{ textAlign: 'center' }}>Climb the wake-up league</AppText>
           </View>
-          <View style={{ gap: spacing[2], marginTop: spacing[2] }}>
+          <View style={{ gap: spacing[2], marginTop: spacing[3] }}>
             {leaderboard.map((user) => (
-              <View key={user.name} style={{ alignItems: 'center', backgroundColor: user.current ? 'rgba(255,255,255,0.85)' : colors.surface, borderColor: user.current ? colors.surfaceLavender : colors.border, borderRadius: radii.lg, borderWidth: 1, flexDirection: 'row', gap: spacing[3], padding: spacing[3], ...(user.current ? shadows.glow : shadows.soft) }}>
-                <View style={{ alignItems: 'center', backgroundColor: user.current ? colors.surfaceLavender : colors.surfaceMuted, borderRadius: radii.full, height: 34, justifyContent: 'center', width: 34 }}>
-                  <AppText variant="caption" tone="accent">{user.badge}</AppText>
+              <View key={user.name} style={{ alignItems: 'center', backgroundColor: user.current ? 'rgba(255,255,255,0.9)' : colors.surface, borderColor: user.current ? colors.primary : colors.border, borderRadius: radii.lg, borderWidth: user.current ? 1.5 : 1, flexDirection: 'row', gap: spacing[3], padding: spacing[3], ...(user.current ? shadows.glow : shadows.soft) }}>
+                <View style={{ alignItems: 'center', backgroundColor: user.current ? '#35c27b' : colors.surfaceMuted, borderRadius: radii.full, height: 34, justifyContent: 'center', width: 34 }}>
+                  <AppText variant="caption" tone={user.current ? 'inverse' : 'accent'}>{user.badge}</AppText>
                 </View>
                 <View style={{ flex: 1 }}>
                   <AppText variant="bodyLarge">{user.name}</AppText>
                   <AppText variant="caption" tone="secondary">{user.score} pts</AppText>
                 </View>
-                {user.current ? <Sparkles color={colors.primaryDeep} size={16} /> : null}
               </View>
             ))}
           </View>
