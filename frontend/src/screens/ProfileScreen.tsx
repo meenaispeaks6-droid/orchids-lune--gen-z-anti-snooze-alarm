@@ -3,7 +3,7 @@ import { AppText, BottomNav, Button, Card, Chip, SectionHeader, Toggle } from '@
 import { mockProfile } from '@/src/data/mockProfile';
 import { colors, radii, spacing } from '@/src/theme';
 import { router } from 'expo-router';
-import { Bell, Moon, ShieldCheck, Settings2 } from 'lucide-react-native';
+import { Bell, Moon, ShieldCheck } from 'lucide-react-native';
 import { useState } from 'react';
 import { View } from 'react-native';
 
@@ -172,19 +172,13 @@ export default function ProfileScreen() {
     <ScreenShell
       footer={
         <BottomNav
-          activeTab="Settings"
+          activeTab="Profile"
           onTabPress={(tab) => router.push(tab === 'Home' ? '/home' : tab === 'Alarms' ? '/alarms' : tab === 'Stats' ? '/stats' : '/profile')}
         />
       }>
-      <PageHeader title="Settings" subtitle="Manage your rhythm, profile, and wake preferences." />
+      <PageHeader title="Profile" subtitle="Your rhythm settings and wake preferences." />
 
       <Card elevated style={{ alignItems: 'center', gap: spacing[4], padding: spacing[6] }}>
-        <View style={{ alignItems: 'center', gap: spacing[2] }}>
-          <View style={{ alignItems: 'center', backgroundColor: colors.surfaceLavender, borderRadius: radii.full, height: 46, justifyContent: 'center', width: 46 }}>
-            <Settings2 color={colors.primaryDeep} size={24} />
-          </View>
-          <AppText variant="label" tone="accent">Account</AppText>
-        </View>
         <ProfileCharacterAvatar />
         <View style={{ alignItems: 'center', gap: spacing[1] }}>
           <AppText variant="titleSmall">{mockProfile.name}</AppText>
@@ -223,7 +217,7 @@ export default function ProfileScreen() {
         </View>
       </View>
 
-      <Button variant="secondary" fullWidth>Edit settings</Button>
+      <Button variant="secondary" fullWidth>Edit profile</Button>
     </ScreenShell>
   );
 }
